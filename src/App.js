@@ -45,8 +45,8 @@ class App extends Component {
   setCountDown() {
     let time = this.state.time;
     setInterval(() => {
-      if (time === 0) { time = 15 }
       time -= 1
+      if (time <= 0) { time = 15 }
       this.setState({ time: time });
     }, 1000);
   }
