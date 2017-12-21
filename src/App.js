@@ -20,9 +20,9 @@ class App extends Component {
   }
 
   forceUpdate() {
-    this.setCountDown();
     const oldRows = this.state.rows;
     Api.index().then((res) => {
+      this.setCountDown();
       let newRows = res.map((i) => {
         let status = null;
         const oldRow = oldRows.find((r) => r.value.id === i.id);
