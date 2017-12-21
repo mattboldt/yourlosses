@@ -1,6 +1,6 @@
 {
   "name": "simple-ticker",
-  "homepage" : "http://yourlosses.com",
+  "homepage": "http://yourlosses.com",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
