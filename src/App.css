@@ -1,0 +1,50 @@
+body {
+  background: #1e2127;
+  color: #abb2bf;
+  font-family: monospace;
+}
+.App {
+  text-align: left;
+}
+table {
+}
+th {
+  color: gold;
+  text-transform: uppercase;
+  padding: 10px 0;
+  min-width: 130px;
+}
+
+th:nth-child(1) {
+  min-width: 0;
+}
+th:nth-child(2) {
+  min-width: 70px;
+}
+
+tr td:first-of-type {
+  border-left: rgb(116, 116, 116) 1px dashed;
+}
+
+td {
+  border-top: rgb(94, 94, 94) 1px dashed;
+  border-right: rgb(116, 116, 116) 1px dashed;
+  padding: 10px;
+  margin-top: 5px;
+}
+tr:last-of-type td {
+  border-bottom: rgb(116, 116, 116) 1px dashed;
+}
+
+.happy {
+  color: rgb(157, 241, 0);
+}
+.sad {
+  color: rgb(255, 60, 0);
+}
+.up {
+  background: rgb(59, 85, 49);
+}
+.down {
+  background: rgb(70, 34, 34);
+}
