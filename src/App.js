@@ -1,101 +1,119 @@
 import React, { Component } from 'react';
+import Differ from './differ.js';
 import Api from './api.js';
+import CoinRow from './coinRow.js';
+import { Button, Divider, Container } from 'semantic-ui-react';
+
+const INTERVAL = 100 / 15;
 
 class App extends Component {
 
   constructor(props) {
     super(props);
     this.state = {
-      rows: [],
-      time: 15
+      rows: this.initRows(),
+      time: 0,
+      isPolling: true,
+      countDown: null
     }
     this.forceUpdate = this.forceUpdate.bind(this);
-    this.classForInt = this.classForInt.bind(this);
     this.setCountDown = this.setCountDown.bind(this);
+    this.setRows = this.setRows.bind(this);
+    // this.togglePolling = this.togglePolling.bind(this);
   }
 
   componentDidMount(){
     this.forceUpdate();
-    setInterval(() => this.forceUpdate(), 15000);
+    setInterval(this.forceUpdate, 15000);
+  }
+
+  initRows() {
+    let rows = null;
+    const localRows = localStorage.getItem('ticker-last-rows');
+
+    if (localRows) {
+      rows = JSON.parse(localRows);
+    }
+    return rows ? rows : [];
+  }
+
+  setRows(newRows) {
+    this.setState({ rows: newRows });
+    localStorage.setItem('ticker-last-rows', JSON.stringify(newRows));
   }
 
   forceUpdate() {
-    const oldRows = this.state.rows;
+    const rows = this.state.rows;
     Api.index().then((res) => {
-      this.setCountDown();
+      this.initCountdown();
       let newRows = res.map((i) => {
-        let status = null;
-        const oldRow = oldRows.find((r) => r.value.id === i.id);
-        if (oldRow) {
-          if (oldRow.value.price_usd > i.price_usd ||
-              oldRow.value.rank > i.rank) {
-            status = 'down';
-          }
-          if (oldRow.value.price_usd < i.price_usd ||
-              oldRow.value.rank < i.rank) {
-            status = 'up';
-          }
-        }
+        const oldRow = rows.find((r) => r.value.id === i.id);
+        const status = Differ.diff(oldRow, i);
         return { value: i, status: status };
       });
-      this.setState({ rows: newRows });
+      this.setRows(newRows);
+    });
+  }
+
+  initCountdown() {
+    if (this.state.countDown) {
+      clearInterval(this.state.countDown);
+    }
+    this.setState({
+      countDown: setInterval(this.setCountDown, 1000)
     });
   }
 
   setCountDown() {
     let time = this.state.time;
-    setInterval(() => {
-      time -= 1
-      if (time <= 0) { time = 15 }
-      this.setState({ time: time });
-    }, 1000);
+    time += INTERVAL;
+    if (time >= 100) { time = 0 }
+    this.setState({ time: time });
   }
 
-  classForInt(value) {
-    return value > 0 ? 'happy' : 'sad';
-  }
+  // togglePolling() {
+  //   clearInterval(this.forceUpdate);
+  //   clearInterval(this.setCountDown);
+  //   this.setState({ isPolling: !this.state.isPolling });
+  // }
   
   render() {
-    let rowClass = '';
+    
+
     return (
-      <div>
-        <table className="App">
-          <thead>
-            <tr>
-              <th>Rank</th>
-              <th>Symbol</th>
-              <th>Price (USD)</th>
-              <th>Change (24H)</th>
-              <th>Change (1H)</th>
-              <th>Market Cap (USD)</th>
-              <th>Full Name</th>
-            </tr>
-          </thead>
-          <tbody>
-            {this.state.rows.map((row, idx) => {
-              if (row.status) { rowClass = row.status; }
-              return(
-                <tr key={idx} className={rowClass}>
-                  <td>{row.value.rank}</td>
-                  <td>{row.value.symbol}</td>
-                  <td>
-                    <span role="img" aria-label="money bags">💰 </span>
-                    ${row.value.price_usd}
-                  </td>
-                  <td className={this.classForInt(row.value.percent_change_24h)}>
-                    {row.value.percent_change_24h}%
-                  </td>
-                  <td className={this.classForInt(row.value.percent_change_1h)}>
-                    {row.value.percent_change_1h}%
-                  </td>
-                  <td>${row.value.market_cap_usd}</td>
-                  <td>{row.value.name}</td>
-                </tr>
-              )
-            })}
-          </tbody>
-        </table>
-        <p>{this.state.time}</p>
+      <div className="App">
+        <Container style={{width: 800}}>
+          <table>
+            <thead>
+              <tr>
+                <th>Rank</th>
+                <th>Symbol</th>
+                <th>Price (USD)</th>
+                <th>Change (24H)</th>
+                <th>Change (1H)</th>
+                <th>Market Cap (USD)</th>
+                <th>Name</th>
+              </tr>
+            </thead>
+            <tbody>
+              {this.state.rows.map((row, idx) =>
+                <CoinRow key={idx} row={row} />
+              )}
+            </tbody>
+          </table>
+
+          <Divider />
+
+          {/* <Button
+            onClick={this.togglePolling}
+            secondary>
+            {this.state.isPolling ? 'Stop' : 'Start'} Polling
+          </Button> */}
+        </Container>
+        <div
+          className="progress"
+          style={{ width: `${this.state.time}%` }}>
+        </div>
       </div>
     );
   }

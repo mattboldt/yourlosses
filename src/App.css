@@ -1,13 +1,26 @@
+html, body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
 body {
   background: #1e2127;
   color: #abb2bf;
   font-family: monospace;
+  padding: 0;
+  margin: 0;
 }
 .App {
   text-align: left;
+  overflow: auto;
+  height: 100vh;
 }
+
 table {
+  width: 100%;
 }
+
 th {
   color: gold;
   text-transform: uppercase;
@@ -47,4 +60,11 @@ tr:last-of-type td {
 }
 .down {
   background: rgb(70, 34, 34);
+}
+.progress {
+  position: fixed;
+  bottom: 0;
+  background: #2d3a55;
+  height: 5px;
+  transition: width .15s ease-in-out;
 }

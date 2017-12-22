@@ -1,7 +1,7 @@
 import 'whatwg-fetch';
 import queryString from 'query-string'
 
-const API_URL = 'https://api.coinmarketcap.com/v1/ticker/'
+const API_URL = 'https://api.coinmarketcap.com/v1/ticker/';
 
 class Api {
 
