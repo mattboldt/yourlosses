@@ -4,7 +4,7 @@ import Api from './api.js';
 import CoinRow from './coinRow.js';
 import { Button, Divider, Container } from 'semantic-ui-react';
 
-const INTERVAL = 100 / 15;
+const INTERVAL = 100 / 14;
 
 class App extends Component {
 
@@ -44,12 +44,17 @@ class App extends Component {
 
   forceUpdate() {
     const rows = this.state.rows;
+    this.initCountdown();
+
     Api.index().then((res) => {
-      this.initCountdown();
       let newRows = res.map((i) => {
         const oldRow = rows.find((r) => r.value.id === i.id);
         const status = Differ.diff(oldRow, i);
-        return { value: i, status: status };
+
+        return {
+          value: i,
+          status: status
+        };
       });
       this.setRows(newRows);
     });
@@ -60,14 +65,14 @@ class App extends Component {
       clearInterval(this.state.countDown);
     }
     this.setState({
-      countDown: setInterval(this.setCountDown, 1000)
+      countDown: setInterval(this.setCountDown, 1000),
+      time: 0
     });
   }
 
   setCountDown() {
     let time = this.state.time;
     time += INTERVAL;
-    if (time >= 100) { time = 0 }
     this.setState({ time: time });
   }
 
@@ -78,8 +83,6 @@ class App extends Component {
   // }
   
   render() {
-    
-
     return (
       <div className="App">
         <Container style={{width: 800}}>
