@@ -55,7 +55,7 @@ class CoinRow extends Component {
 
   get rowUpdatedAt() {
     const row = this.props.row;
-    return row.status && row.old && `${moment(row.updatedAt).format('llll')}`;
+    return row.status && row.old && `${moment(row.updatedAt).fromNow()}`;
   }
 
   render() {
