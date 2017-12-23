@@ -3,21 +3,24 @@ import Differ from './differ.js';
 
 class CoinParser {
 
-  fetchCoins(rows) {
+  fetchCoins(currentRows) {
+    const self = this;
+
     return new Promise(function(resolve, reject) {
       Api.index().then((res) => {
-        let newRows = res.map((i) => {
-          const oldRow = rows.find((r) => r.value.id === i.id);
-          const status = Differ.diff(oldRow, i);
+        const newRows = res.map((row) => self.formatRow(row, currentRows));
+        const anyUpdated = newRows.some((row) => row.status);
 
-          return {
-            value: i,
-            status: status
-          };
-        });
+        const minutes = new Date().getMinutes();
+        const needsUpdate = currentRows.length === 0 || anyUpdated;
 
-        localStorage.setItem('ticker-last-rows', JSON.stringify(newRows));
-        resolve(newRows);
+        if (needsUpdate) {
+          localStorage.setItem('ticker-last-rows', JSON.stringify(newRows));
+          resolve(newRows);
+        } else {
+          resolve();
+        }
+
       });
     });
   }
@@ -30,6 +33,17 @@ class CoinParser {
       rows = JSON.parse(localRows);
     }
     return rows ? rows : [];
+  }
+
+  formatRow(row, currentRows) {
+    const oldRow = currentRows.find((r) => r.value.id === row.id);
+    const status = Differ.diff(oldRow, row);
+    return {
+      value: row,
+      old: oldRow ? oldRow.value : null,
+      status: status,
+      updatedAt: new Date()
+    };
   }
 
 }

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import CoinParser from './coin-parser.js';
-import CoinRow from './coinRow.js';
+import CoinRow from './coin-row.js';
 import { Button, Divider, Container } from 'semantic-ui-react';
 
 const INTERVAL = 100 / 14;
@@ -15,20 +15,22 @@ class App extends Component {
       isPolling: true,
       countDown: null
     }
-    this.forceUpdate = this.forceUpdate.bind(this);
+    this.fetchCoins = this.fetchCoins.bind(this);
     this.setCountDown = this.setCountDown.bind(this);
   }
 
   componentDidMount(){
-    this.forceUpdate();
-    setInterval(this.forceUpdate, 15000);
+    this.fetchCoins();
+    setInterval(this.fetchCoins, 15000);
   }
 
-  forceUpdate() {
+  fetchCoins() {
     this.initCountdown();
 
     CoinParser.fetchCoins(this.state.rows).then((res) => {
-      this.setState({ rows: res });
+      if (res) {
+        this.setState({ rows: res });
+      }
     });
   }
 

@@ -56,10 +56,12 @@ tr:last-of-type td {
   color: rgb(255, 60, 0);
 }
 .up {
-  background: rgb(59, 85, 49);
+  background-color: rgba(59, 85, 49, 1);
+  animation: fadeOutUp 10s forwards;
 }
 .down {
-  background: rgb(70, 34, 34);
+  background-color: rgba(70, 34, 34, 1);
+  animation: fadeOutDown 10s forwards;
 }
 .progress {
   position: fixed;
@@ -67,4 +69,24 @@ tr:last-of-type td {
   background: #2d3a55;
   height: 5px;
   transition: width .15s ease-in-out;
+}
+
+.typed-cursor{
+  opacity: 1;
+  animation: typedjsBlink 0.7s infinite;
+  -webkit-animation: typedjsBlink 0.7s infinite;
+          animation: typedjsBlink 0.7s infinite;
+}
+@keyframes fadeOutUp{
+  100% { background-color: rgba(59, 85, 49, 0.3); }
+}
+@-webkit-keyframes fadeOutUp{
+  100% { background-color: rgba(59, 85, 49, 0.3); }
+}
+
+@keyframes fadeOutDown{
+  100% { background-color: rgba(70, 34, 34, 0.3); }
+}
+@-webkit-keyframes fadeOutDown{
+  100% { background-color: rgba(70, 34, 34, 0.3); }
 }
