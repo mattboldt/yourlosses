@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import Differ from './differ.js';
-import Api from './api.js';
+import CoinParser from './coin-parser.js';
 import CoinRow from './coinRow.js';
 import { Button, Divider, Container } from 'semantic-ui-react';
 
@@ -11,15 +10,13 @@ class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      rows: this.initRows(),
+      rows: CoinParser.initRows(),
       time: 0,
       isPolling: true,
       countDown: null
     }
     this.forceUpdate = this.forceUpdate.bind(this);
     this.setCountDown = this.setCountDown.bind(this);
-    this.setRows = this.setRows.bind(this);
-    // this.togglePolling = this.togglePolling.bind(this);
   }
 
   componentDidMount(){
@@ -27,36 +24,11 @@ class App extends Component {
     setInterval(this.forceUpdate, 15000);
   }
 
-  initRows() {
-    let rows = null;
-    const localRows = localStorage.getItem('ticker-last-rows');
-
-    if (localRows) {
-      rows = JSON.parse(localRows);
-    }
-    return rows ? rows : [];
-  }
-
-  setRows(newRows) {
-    this.setState({ rows: newRows });
-    localStorage.setItem('ticker-last-rows', JSON.stringify(newRows));
-  }
-
   forceUpdate() {
-    const rows = this.state.rows;
     this.initCountdown();
 
-    Api.index().then((res) => {
-      let newRows = res.map((i) => {
-        const oldRow = rows.find((r) => r.value.id === i.id);
-        const status = Differ.diff(oldRow, i);
-
-        return {
-          value: i,
-          status: status
-        };
-      });
-      this.setRows(newRows);
+    CoinParser.fetchCoins(this.state.rows).then((res) => {
+      this.setState({ rows: res });
     });
   }
 
@@ -75,12 +47,6 @@ class App extends Component {
     time += INTERVAL;
     this.setState({ time: time });
   }
-
-  // togglePolling() {
-  //   clearInterval(this.forceUpdate);
-  //   clearInterval(this.setCountDown);
-  //   this.setState({ isPolling: !this.state.isPolling });
-  // }
   
   render() {
     return (
