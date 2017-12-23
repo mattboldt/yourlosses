@@ -26,7 +26,7 @@ class CoinData extends Component {
     }
 
     return(
-      <td>
+      <td className={this.props.className}>
         {html}
       </td>
     )
