@@ -1,6 +1,6 @@
 #!/bin/bash
+
 yarn build
-git add ./build
-git commit -a -m 'build'
-git push origin master
-git subtree push --prefix build origin gh-pages
+rm -rf ./docs
+mkdir ./docs
+cp -a ./build/. ./docs/
