@@ -59,7 +59,7 @@ class App extends Component {
           <Divider />
 
           <small>
-            Data Source: <a href="https://coinmarketcap.com/">Coinmon</a> | 
+            Data Source: <a href="https://coinmarketcap.com/">coinmarketcap</a> | 
 
             Made with <span role="img" aria-label="love">❤️</span> by <a href='https://mattboldt.com/?utm_source=yourlosses'>Matt Boldt</a> |
 
