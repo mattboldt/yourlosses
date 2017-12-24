@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import CoinParser from './coin-parser.js';
 import CoinRow from './coin-row.js';
-import { Button, Divider, Container } from 'semantic-ui-react';
+import { Divider, Container } from 'semantic-ui-react';
 
 const INTERVAL = 100 / 14;
 
@@ -75,11 +75,14 @@ class App extends Component {
 
           <Divider />
 
-          {/* <Button
-            onClick={this.togglePolling}
-            secondary>
-            {this.state.isPolling ? 'Stop' : 'Start'} Polling
-          </Button> */}
+          <small>
+            Data Source: <a href='https://coinmarketcap.com/'>Coinmon</a> | 
+            By <a href='https://mattboldt.com/?utm_source=yourlosses'>Matt Boldt</a> |
+            Contribute on <a href='https://github.com/mattboldt/yourlosses'>GitHub</a>
+          </small>
+
+          <Divider />
+
         </Container>
         <div
           className="progress"

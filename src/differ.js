@@ -1,4 +1,4 @@
-const FIELDS = ['price_usd', 'rank', 'percent_change_24h', 'percent_change_1h', 'market_cap_usd'];
+const FIELDS = ['price_usd', 'price_btc', 'rank', 'percent_change_24h', 'percent_change_1h', 'market_cap_usd'];
 
 class Differ {
   diff(oldRow, newRow) {

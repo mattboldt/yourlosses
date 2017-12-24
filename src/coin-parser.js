@@ -1,5 +1,6 @@
 import Api from './api.js';
 import Differ from './differ.js';
+import moment from 'moment';
 
 class CoinParser {
 
@@ -8,13 +9,11 @@ class CoinParser {
 
     return new Promise(function(resolve, reject) {
       Api.index().then((res) => {
-        const newRows = res.map((row) => self.formatRow(row, currentRows));
-        const anyUpdated = newRows.some((row) => row.status);
+        const newRows = res.map((row) =>
+          self.formatRow(row, currentRows)
+        );
 
-        const minutes = new Date().getMinutes();
-        const needsUpdate = currentRows.length === 0 || anyUpdated;
-
-        if (needsUpdate) {
+        if (self.needsUpdate(newRows, currentRows)) {
           localStorage.setItem('ticker-last-rows', JSON.stringify(newRows));
           resolve(newRows);
         } else {
@@ -41,9 +40,37 @@ class CoinParser {
     return {
       value: row,
       old: oldRow ? oldRow.value : null,
-      status: status,
-      updatedAt: new Date()
+      status: status
     };
+  }
+
+  needsUpdate(newRows, oldRows) {
+    if (oldRows.length === 0) {
+      return true;
+    }
+
+    const expiryTime = moment().subtract(20, 'minutes').toDate();
+    const oldDate = moment.unix(oldRows[0].value.last_updated).toDate();
+    if (oldDate < expiryTime) {
+      return true;
+    }
+
+    const newStatuses = newRows.some((row) => row.status);
+    if (newStatuses) {
+      return true;
+    }
+
+    const existingIds = oldRows.map((row) => row.value.id);
+    const newIds = newRows.map((row) => row.value.id);
+
+    const newHasOld = existingIds.every((id) => newIds.includes(id))
+    const oldHasNew = newIds.every((id) => existingIds.includes(id));
+
+    if (newHasOld && oldHasNew) {
+      return false;
+    }
+
+    return true;
   }
 
 }

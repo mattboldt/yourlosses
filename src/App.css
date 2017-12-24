@@ -57,11 +57,11 @@ tr:last-of-type td {
 }
 .up {
   background-color: rgba(59, 85, 49, 1);
-  animation: fadeOutUp 10s forwards;
+  animation: fadeOutUp 15s forwards;
 }
 .down {
   background-color: rgba(70, 34, 34, 1);
-  animation: fadeOutDown 10s forwards;
+  animation: fadeOutDown 15s forwards;
 }
 .progress {
   position: fixed;
@@ -78,15 +78,15 @@ tr:last-of-type td {
           animation: typedjsBlink 0.7s infinite;
 }
 @keyframes fadeOutUp{
-  100% { background-color: rgba(59, 85, 49, 0.3); }
+  100% { background-color: rgba(59, 85, 49, 0.1); }
 }
 @-webkit-keyframes fadeOutUp{
-  100% { background-color: rgba(59, 85, 49, 0.3); }
+  100% { background-color: rgba(59, 85, 49, 0.1); }
 }
 
 @keyframes fadeOutDown{
-  100% { background-color: rgba(70, 34, 34, 0.3); }
+  100% { background-color: rgba(70, 34, 34, 0.2); }
 }
 @-webkit-keyframes fadeOutDown{
-  100% { background-color: rgba(70, 34, 34, 0.3); }
+  100% { background-color: rgba(70, 34, 34, 0.2); }
 }

@@ -1,106 +1,80 @@
 import React, { Component } from 'react';
 import CoinData from './coin-data.js';
+import DiffDescribe from './diff-describe.js';
+import Precise from './precise.js';
 import moment from 'moment';
 import accounting from 'accounting';
 
 class CoinRow extends Component {
+
   constructor(props) {
     super(props);
-    this.classForInt = this.classForInt.bind(this);
+    this.desc = new DiffDescribe(props.row);
   }
 
   classForInt(value) {
     return value > 0 ? 'happy' : 'sad';
   }
 
-  get rankTitle() {
-    const row = this.props.row;
-    return row.status &&
-           row.old &&
-           row.old.rank !== row.value.rank &&
-           `Was #${row.old.rank}`;
-  }
-
-  get priceTitle() {
-    const row = this.props.row;
-    return row.status &&
-           row.old &&
-           row.old.price_usd !== row.value.price_usd &&
-           `Was $${accounting.format(row.old.price_usd, { precision: 7 })}`;
-  }
-
-  get marketCapTitle() {
-    const row = this.props.row;
-    return row.status &&
-           row.old &&
-           row.old.market_cap_usd !== row.value.market_cap_usd &&
-           `Was $${accounting.format(row.old.market_cap_usd)}`;
-  }
-
-  get change24Title() {
-    const row = this.props.row;
-    return row.status &&
-           row.old &&
-           row.old.percent_change_24h !== row.value.percent_change_24h &&
-           `Was ${row.old.percent_change_24h}%`;
-  }
-
-  get change1Title() {
-    const row = this.props.row;
-    return row.status &&
-           row.old &&
-           row.old.percent_change_1h !== row.value.percent_change_1h &&
-           `Was ${row.old.percent_change_1h}%`;
-  }
-
   get rowUpdatedAt() {
     const row = this.props.row;
-    return row.status && row.old && `${moment(row.updatedAt).fromNow()}`;
+    const val = row.value.last_updated;
+    if (row.status && row.old) {
+      return `${moment.unix(val).fromNow()}`;
+    }
+  }
+
+  get rowClass() {
+    if (this.props.row.status) { 
+      return this.props.row.status;
+    } else {
+      return '';
+    }
   }
 
   render() {
-    const row = this.props.row;
-    let rowClass = '';
-    if (row.status) { rowClass = row.status; }
+    const val = this.props.row.value;
 
     return(
-      <tr className={rowClass}>
+      <tr className={this.rowClass}>
         <CoinData
-          header={this.rankTitle}
+          header={this.desc.format('rank', '#')}
           content={this.rowUpdatedAt}>
-          {row.value.rank}
+          {val.rank}
         </CoinData>
 
-        <td>{row.value.symbol}</td>
+        <td>{val.symbol}</td>
 
         <CoinData
-          header={this.priceTitle}
+          header={this.desc.format('price_usd', '$')}
           content={this.rowUpdatedAt}>
           <span role="img" aria-label="money bags">💰 </span>
-          ${row.value.price_usd}
+          ${accounting.format(val.price_usd, {
+            precision: Precise.usd(val.price_usd)
+          })}
         </CoinData>
 
         <CoinData
-          className={this.classForInt(row.value.percent_change_24h)}
-          header={this.change24Title}
+          className={this.classForInt(val.percent_change_24h)}
+          header={this.desc.format('percent_change_24h', '%')}
           content={this.rowUpdatedAt}>
-          {row.value.percent_change_24h}%
+          {val.percent_change_24h}%
         </CoinData>
 
         <CoinData
-          className={this.classForInt(row.value.percent_change_1h)}
-          header={this.change1Title}
+          className={this.classForInt(val.percent_change_1h)}
+          header={this.desc.format('percent_change_1h', '%')}
           content={this.rowUpdatedAt}>
-          {row.value.percent_change_1h}%
+          {val.percent_change_1h}%
         </CoinData>
 
         <CoinData
-          header={this.marketCapTitle}
+          header={this.desc.format('market_cap_usd', '$')}
           content={this.rowUpdatedAt}>      
-          ${accounting.format(row.value.market_cap_usd)}
+          ${accounting.format(val.market_cap_usd)}
         </CoinData>
 
-        <td>{row.value.name}</td>
+        <td>{val.name}</td>
       </tr>
     )
   }
