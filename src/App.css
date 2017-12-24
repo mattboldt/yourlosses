@@ -46,7 +46,7 @@ td {
   margin-top: 5px;
 }
 tr:last-of-type td {
-  border-bottom: rgba(255,255,255,.1) 1px dashed;
+  border-bottom: rgba(255,255,255,.2) 1px dashed;
 }
 
 .happy {
