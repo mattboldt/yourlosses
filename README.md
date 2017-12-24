@@ -1,0 +1,1 @@
+## A super simple cryptocurrency ticker based on [coinmon](https://github.com/bichenkk/coinmon) using data from [coinmarketcap](https://coinmarketcap.com/)

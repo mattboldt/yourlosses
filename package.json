@@ -1,8 +1,8 @@
 {
-  "name": "simple-ticker",
+  "name": "yourlosses",
   "homepage": "https://yourlosses.com",
   "version": "0.1.0",
-  "private": true,
+  "private": false,
   "dependencies": {
     "accounting": "^0.4.1",
     "moment": "^2.20.1",
