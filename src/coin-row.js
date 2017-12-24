@@ -12,6 +12,10 @@ class CoinRow extends Component {
     this.desc = new DiffDescribe(props.row);
   }
 
+  componentWillReceiveProps(nextProps) {
+    this.desc = new DiffDescribe(nextProps.row);
+  }
+
   classForInt(value) {
     return value > 0 ? 'happy' : 'sad';
   }
@@ -66,6 +70,13 @@ class CoinRow extends Component {
           header={this.desc.format('percent_change_1h', '%')}
           content={this.rowUpdatedAt}>
           {val.percent_change_1h}%
+        </CoinData>
+
+        <CoinData
+          className={this.classForInt(val.percent_change_7d)}
+          header={this.desc.format('percent_change_7d', '%')}
+          content={this.rowUpdatedAt}>
+          {val.percent_change_7d}%
         </CoinData>
 
         <CoinData

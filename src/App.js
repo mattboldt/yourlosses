@@ -36,7 +36,7 @@ class App extends Component {
   render() {
     return (
       <div className="App">
-        <Container style={{width: 800}}>
+        <Container style={{width: 950}}>
           <table>
             <thead>
               <tr>
@@ -45,6 +45,7 @@ class App extends Component {
                 <th>Price (USD)</th>
                 <th>Change (24H)</th>
                 <th>Change (1H)</th>
+                <th>Change (1W)</th>
                 <th>Market Cap (USD)</th>
                 <th>Name</th>
               </tr>

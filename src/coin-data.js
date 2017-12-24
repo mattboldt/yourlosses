@@ -1,36 +1,32 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { Popup } from 'semantic-ui-react';
 
-class CoinData extends Component {
-  get popup() {
-    return (
-      <Popup
-        trigger={
-          <div>
-            {this.props.children}
-          </div>
-        }
-        header={this.props.header}        
-        content={this.props.content}
-      />
-    )
+const CoinData = (props) => {
+  const popup = (
+    <Popup
+      trigger={
+        <div>
+          {props.children}
+        </div>
+      }
+      header={props.header}
+      content={props.content}
+    />
+  )
+
+  let html = null;
+
+  if (props.header) {
+    html = popup;
+  } else {
+    html = props.children;
   }
 
-  render() {
-    let html = null;
-
-    if (this.props.header) {
-      html = this.popup;
-    } else {
-      html = this.props.children;
-    }
-
-    return(
-      <td className={this.props.className}>
-        {html}
-      </td>
-    )
-  }
+  return(
+    <td className={props.className}>
+      {html}
+    </td>
+  )
 }
 
 export default CoinData;
