@@ -4,3 +4,5 @@ yarn build
 rm -rf ./docs
 mkdir ./docs
 cp -a ./build/. ./docs/
+touch ./docs/CNAME
+echo 'yourlosses.com' > ./docs/CNAME
