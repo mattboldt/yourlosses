@@ -68,7 +68,7 @@ tr:last-of-type td {
   bottom: 0;
   background: #2d3a55;
   height: 5px;
-  transition: width .15s ease-in-out;
+  transition: width .10s ease-in-out;
 }
 
 .typed-cursor{

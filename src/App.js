@@ -1,9 +1,10 @@
 import React, { Component } from 'react';
 import CoinParser from './coin-parser.js';
 import CoinRow from './coin-row.js';
+import Countdown from './countdown.js';
 import { Divider, Container } from 'semantic-ui-react';
 
-const INTERVAL = 100 / 14;
+const FETCH_RATE = 15000;
 
 class App extends Component {
 
@@ -11,43 +12,25 @@ class App extends Component {
     super(props);
     this.state = {
       rows: CoinParser.initRows(),
-      time: 0,
-      isPolling: true,
-      countDown: null
+      fetchedAt: null
     }
+
     this.fetchCoins = this.fetchCoins.bind(this);
-    this.setCountDown = this.setCountDown.bind(this);
   }
 
   componentDidMount(){
     this.fetchCoins();
-    setInterval(this.fetchCoins, 15000);
+    setInterval(this.fetchCoins, FETCH_RATE);
   }
 
   fetchCoins() {
-    this.initCountdown();
+    this.setState({ fetchedAt: new Date() });
 
     CoinParser.fetchCoins(this.state.rows).then((res) => {
       if (res) {
         this.setState({ rows: res });
       }
     });
-  }
-
-  initCountdown() {
-    if (this.state.countDown) {
-      clearInterval(this.state.countDown);
-    }
-    this.setState({
-      countDown: setInterval(this.setCountDown, 1000),
-      time: 0
-    });
-  }
-
-  setCountDown() {
-    let time = this.state.time;
-    time += INTERVAL;
-    this.setState({ time: time });
   }
   
   render() {
@@ -76,18 +59,18 @@ class App extends Component {
           <Divider />
 
           <small>
-            Data Source: <a href='https://coinmarketcap.com/'>Coinmon</a> | 
-            By <a href='https://mattboldt.com/?utm_source=yourlosses'>Matt Boldt</a> |
-            Contribute on <a href='https://github.com/mattboldt/yourlosses'>GitHub</a>
+            Data Source: <a href="https://coinmarketcap.com/">Coinmon</a> | 
+
+            Made with <span role="img" aria-label="love">❤️</span> by <a href='https://mattboldt.com/?utm_source=yourlosses'>Matt Boldt</a> |
+
+            Contribute on <a href="https://github.com/mattboldt/yourlosses">GitHub</a>
           </small>
 
           <Divider />
 
         </Container>
-        <div
-          className="progress"
-          style={{ width: `${this.state.time}%` }}>
-        </div>
+
+        <Countdown fetchedAt={this.state.fetchedAt} rate={FETCH_RATE} />
       </div>
     );
   }
