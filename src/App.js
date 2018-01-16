@@ -64,7 +64,9 @@ class App extends Component {
 
             Made with <span role="img" aria-label="love">❤️</span> by <a href='https://mattboldt.com/?utm_source=yourlosses'>Matt Boldt</a> |
 
-            Contribute on <a href="https://github.com/mattboldt/yourlosses">GitHub</a>
+            Contribute on <a href="https://github.com/mattboldt/yourlosses">GitHub</a> |
+
+            <a href="http://www.uscourts.gov/services-forms/bankruptcy">Learn About Bankruptcy</a>
           </small>
 
           <Divider />
